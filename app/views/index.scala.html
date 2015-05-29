@@ -1,0 +1,100 @@
+@(series: List[Serie])
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Acompanhamento de seriados</title>
+        <meta charset="UTF-8">
+        <meta name=description content="">
+        <meta name=viewport content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap CSS -->
+		<link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet" media="screen">        
+ 		<script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" rel="javascript" media="screen"></script>
+ 		<script src="@routes.Assets.at("javascripts/jquery-extra.js")" rel="javascript" media="screen"></script>
+    </head>
+    <body>
+    	<div class="container"><br>
+    		<div class="jumbotron">
+    			<h1 >Sistema de acompanhamento de seriados</h1>
+    			<p>Acompanhe em que episódio você está em cada série a que assiste.</p>
+    		</div>
+    		
+    		
+    			<div class="alert alert-success" role="alert" id="successPanel">
+				<button type="button" class="close" id="close"><span aria-hidden="true">&times;</span>
+				<span class="sr-only">Close</span></button>
+				<p>Clique no &#10003 para marcar uma série como sendo acompanhada</p>
+				</div>
+    		
+    		<div class="row" style="text-align: center;">
+    			<div class="col-md-3" style="left: 10%;">
+    				<div class="list-group">
+		    			<h1 class="list-group-item active" style="font-size: xx-large;">Séries</h1>
+		    			@for(serie <- series){
+		    				@if(!serie.isAcompanhada()){
+		    				<form method="post" action="@routes.Application.acompanharSerie()">    							
+			    					<input type="hidden" name="id" value="@serie.getId()">
+					            	<button type="submit" class="close" id="acompanharSerie"><span aria-hidden="true">&#10003;</span>
+					            	<span class="sr-only">Acompanhar serie</span></button>
+					        	</form>
+		    				<div id="showHide" class="panel-heading span5 episodio">
+			    					<p class="unselectable">@serie.getNome()</p>			    					
+			    			</div>
+			    				<ul class="lista list-group episodio">			    				
+			    					@for(temporada <- serie.getTemporadas()){
+			    						<li style="background-color: gray;" class="list-group-item">Temporada @temporada.getNumero</li>
+			    					}
+			    				</ul>
+		    				}
+		    			}
+    				</div>
+    				</div>
+    			
+    			
+    			<div class="col-md-3" style="left: 40%">
+    				<div class="list-group">
+		    			<h1 class="list-group-item active" style="font-size: xx-large;">Acompanhando</h1>		    			
+		    			@for(serie <- series){
+		    				
+		    				@if(serie.isAcompanhada()){		    							    					
+		    						<li style="font-style: oblique;" class="list-group-item list-group-item-danger">Próximo episódio a assistir: @serie.getProximoEpisodio().getNome()</li>
+			    				<div id="showHide" class="panel-heading span5 episodio">
+			    					<p class="unselectable">@serie.getNome()</p>
+			    				</div>
+			    				<ul class="lista list-group episodio">
+			    					@for(temporada <- serie.getTemporadas()){
+			    					<div class="span5 episodio">
+			    						@if(temporada.getAssistida().equals(-1)){
+			    							<li style="font-style: oblique;" class="list-group-item list-group-item-danger">Temporada @temporada.getNumero</li>
+			    						}else{
+			    							@if(temporada.getAssistida().equals(0)){
+			    							<li style="font-style: oblique;" class="list-group-item list-group-item-warning">Temporada @temporada.getNumero</li>
+			    							}else{
+			    								<li style="font-style: oblique;" class="list-group-item list-group-item-info">Temporada @temporada.getNumero</li>
+			    							}
+			    						}
+			    						</div>
+				    						<ul class="lista list-group episodio">
+				    							@for(episodio <- temporada.getEpisodios()){
+				    								@if(episodio.isAssistido()){				    									
+				    									<li class="list-group-item list-group-item-info">@episodio.getNome</li>
+				    								}else{<li class="list-group-item list-group-item-danger">
+				    									<form method="post" action="@routes.Application.assistirAEpisodio()">    							
+			    											<input type="hidden" name="id" value="@episodio.getId()">
+					            							<button type="submit" class="close" id="assistirAEpisodio"><span aria-hidden="true">&#10003;</span>
+					            							<span class="sr-only">Assistir a episódio</span></button>
+					        							</form>
+				    									@episodio.getNome</li>
+				    								}
+				    							}
+				    						</ul>
+			    					}
+			    				</ul>
+		    				}
+		    			}
+    				</div>
+    			</div> 	
+    			</div>	
+    	</div>
+   	</body>
+</html>
