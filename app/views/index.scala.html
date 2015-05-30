@@ -12,7 +12,7 @@
  		<script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" rel="javascript" media="screen"></script>
  		<script src="@routes.Assets.at("javascripts/jquery-extra.js")" rel="javascript" media="screen"></script>
     </head>
-    <body>
+    <body background="http://thesoulrepublic.com/wp-content/uploads/2013/11/wood-full-hd-black.jpg">
     	<div class="container"><br>
     		<div class="jumbotron">
     			<h1 >Sistema de acompanhamento de seriados</h1>
@@ -28,8 +28,8 @@
     		
     		<div class="row" style="text-align: center;">
     			<div class="col-md-3" style="left: 10%;">
-    				<div class="list-group">
-		    			<h1 class="list-group-item active" style="font-size: xx-large;">Séries</h1>
+    				<div class="panel panel-info">
+		    			<h1 class="panel-title" style="font-size: xx-large;">Séries</h1>
 		    			@for(serie <- series){
 		    				@if(!serie.isAcompanhada()){
 		    				<form method="post" action="@routes.Application.acompanharSerie()">    							
@@ -42,7 +42,7 @@
 			    			</div>
 			    				<ul class="lista list-group episodio">			    				
 			    					@for(temporada <- serie.getTemporadas()){
-			    						<li style="background-color: gray;" class="list-group-item">Temporada @temporada.getNumero</li>
+			    						<li class="list-group-item">Temporada @temporada.getNumero</li>
 			    					}
 			    				</ul>
 		    				}
@@ -52,8 +52,8 @@
     			
     			
     			<div class="col-md-3" style="left: 40%">
-    				<div class="list-group">
-		    			<h1 class="list-group-item active" style="font-size: xx-large;">Acompanhando</h1>		    			
+    				<div class="panel panel-default">
+		    			<h1 class="panel-title" style="font-size: xx-large;">Acompanhando</h1>		    			
 		    			@for(serie <- series){
 		    				
 		    				@if(serie.isAcompanhada()){		    							    					
@@ -77,7 +77,7 @@
 				    						<ul class="lista list-group episodio">
 				    							@for(episodio <- temporada.getEpisodios()){
 				    								@if(episodio.isAssistido()){				    									
-				    									<li class="list-group-item list-group-item-info">@episodio.getNome</li>
+				    									<li class="list-group-item list-group-item-success">@episodio.getNome</li>
 				    								}else{<li class="list-group-item list-group-item-danger">
 				    									<form method="post" action="@routes.Application.assistirAEpisodio()">    							
 			    											<input type="hidden" name="id" value="@episodio.getId()">
